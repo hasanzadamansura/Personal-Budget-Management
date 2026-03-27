@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Büdcə — Giriş</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gold:       #c9a84c;
+      --gold2:      #e2c47a;
+      --gold-dim:   rgba(201,168,76,0.15);
+      --gold-glow:  rgba(201,168,76,0.35);
+      --bg:         #09090b;
+      --bg2:        #111114;
+      --surface:    #18181c;
+      --border:     rgba(201,168,76,0.2);
+      --text:       #f0ede6;
+      --text2:      #9e9a8e;
+      --text3:      #5a5750;
+      --red:        #e05252;
+      --green:      #4caf82;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow: hidden;
+    }
+
+    /* ── Background ── */
+    .bg-wrap {
+      position: fixed; inset: 0; z-index: 0; overflow: hidden;
+    }
+    .bg-wrap::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 50%, rgba(201,168,76,0.07) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 80% at 80% 20%, rgba(201,168,76,0.05) 0%, transparent 50%);
+    }
+    .grid-lines {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black 0%, transparent 100%);
+    }
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      animation: pulse 6s ease-in-out infinite;
+    }
+    .orb1 { width: 400px; height: 400px; background: rgba(201,168,76,0.08); top: -10%; left: -10%; animation-delay: 0s; }
+    .orb2 { width: 300px; height: 300px; background: rgba(201,168,76,0.05); bottom: -5%; right: -5%; animation-delay: 3s; }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.6; transform: scale(1); }
+      50%       { opacity: 1;   transform: scale(1.1); }
+    }
+
+    /* ── Layout ── */
+    .page {
+      position: relative; z-index: 1;
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    /* ── Left panel ── */
+    .left-panel {
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 60px 70px;
+      border-right: 1px solid var(--border);
+      position: relative;
+    }
+    .left-panel::after {
+      content: '';
+      position: absolute; right: -1px; top: 20%; bottom: 20%;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+    }
+
+    .brand {
+      display: flex; align-items: center; gap: 14px;
+      margin-bottom: 60px;
+    }
+    .brand-coin {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold), var(--gold2));
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 22px; color: #09090b; font-weight: 700;
+      box-shadow: 0 0 20px var(--gold-glow);
+    }
+    .brand-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 24px; font-weight: 700;
+      letter-spacing: 4px; color: var(--gold);
+    }
+
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 52px; font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 20px;
+    }
+    .hero-title span {
+      background: linear-gradient(135deg, var(--gold), var(--gold2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero-sub {
+      font-size: 16px; color: var(--text2);
+      line-height: 1.7; max-width: 380px;
+      margin-bottom: 50px;
+    }
+
+    .features {
+      display: flex; flex-direction: column; gap: 16px;
+    }
+    .feature-item {
+      display: flex; align-items: center; gap: 14px;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards;
+    }
+    .feature-item:nth-child(1) { animation-delay: 0.3s; }
+    .feature-item:nth-child(2) { animation-delay: 0.5s; }
+    .feature-item:nth-child(3) { animation-delay: 0.7s; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .feature-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--gold); flex-shrink: 0;
+      box-shadow: 0 0 8px var(--gold-glow);
+    }
+    .feature-text { font-size: 14px; color: var(--text2); }
+
+    /* ── Right panel ── */
+    .right-panel {
+      display: flex; align-items: center; justify-content: center;
+      padding: 60px 70px;
+    }
+
+    .auth-box {
+      width: 100%; max-width: 400px;
+      opacity: 0;
+      animation: fadeUp 0.7s ease 0.2s forwards;
+    }
+
+    .auth-heading {
+      font-family: 'Playfair Display', serif;
+      font-size: 32px; font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .auth-sub {
+      font-size: 14px; color: var(--text2);
+      margin-bottom: 36px;
+    }
+
+    /* Tab switcher */
+    .tabs {
+      display: flex; gap: 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 4px;
+      margin-bottom: 32px;
+    }
+    .tab-btn {
+      flex: 1; padding: 10px;
+      border: none; background: transparent;
+      color: var(--text2); font-family: 'DM Sans', sans-serif;
+      font-size: 14px; font-weight: 500;
+      border-radius: 7px; cursor: pointer;
+      transition: all 0.25s;
+    }
+    .tab-btn.active {
+      background: linear-gradient(135deg, var(--gold), #b8903f);
+      color: #09090b; font-weight: 600;
+      box-shadow: 0 2px 12px var(--gold-glow);
+    }
+
+    /* Form */
+    .form-section { display: none; }
+    .form-section.visible { display: block; }
+
+    .field { margin-bottom: 18px; }
+    .field label {
+      display: block; font-size: 12px; font-weight: 600;
+      color: var(--text2); letter-spacing: 1px;
+      text-transform: uppercase; margin-bottom: 8px;
+    }
+    .field input {
+      width: 100%; padding: 13px 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text); font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+    }
+    .field input::placeholder { color: var(--text3); }
+    .field input:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px var(--gold-dim);
+    }
+
+    .err-msg {
+      font-size: 13px; color: var(--red);
+      min-height: 18px; margin-bottom: 16px;
+    }
+    .ok-msg {
+      font-size: 13px; color: var(--green);
+      min-height: 18px; margin-bottom: 16px;
+    }
+
+    .submit-btn {
+      width: 100%; padding: 14px;
+      background: linear-gradient(135deg, var(--gold), #b8903f);
+      border: none; border-radius: 10px;
+      color: #09090b; font-family: 'DM Sans', sans-serif;
+      font-size: 15px; font-weight: 600;
+      cursor: pointer; letter-spacing: 0.5px;
+      transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 4px 20px var(--gold-glow);
+      position: relative; overflow: hidden;
+    }
+    .submit-btn::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+    }
+    .submit-btn:hover { opacity: 0.92; transform: translateY(-1px); box-shadow: 0 6px 28px var(--gold-glow); }
+    .submit-btn:active { transform: translateY(0); }
+
+    .divider {
+      display: flex; align-items: center; gap: 12px;
+      margin: 28px 0; color: var(--text3); font-size: 12px;
+    }
+    .divider::before, .divider::after {
+      content: ''; flex: 1;
+      height: 1px; background: var(--border);
+    }
+
+    /* Toast */
+    #toast {
+      position: fixed; bottom: 30px; right: 30px;
+      padding: 14px 22px; border-radius: 10px;
+      font-size: 14px; font-weight: 500;
+      transform: translateY(20px);
+      opacity: 0; pointer-events: none;
+      transition: all 0.3s ease; z-index: 9999;
+    }
+    #toast.show {
+      opacity: 1; transform: translateY(0);
+    }
+    #toast.success { background: #1a2e24; border: 1px solid var(--green); color: var(--green); }
+    #toast.error   { background: #2e1a1a; border: 1px solid var(--red);   color: var(--red); }
+
+    @media (max-width: 768px) {
+      .page { grid-template-columns: 1fr; }
+      .left-panel { display: none; }
+      .right-panel { padding: 40px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="bg-wrap">
+  <div class="grid-lines"></div>
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+</div>
+
+<div class="page">
+  <!-- Sol panel -->
+  <div class="left-panel">
+    <div class="brand">
+      <div class="brand-coin">₼</div>
+      <span class="brand-name">BÜDCƏ</span>
+    </div>
+
+    <h1 class="hero-title">
+      Maliyyənizi<br/>
+      <span>ağıllı</span><br/>
+      idarə edin
+    </h1>
+    <p class="hero-sub">
+      Gəlir və xərclərinizi izləyin, aylıq hesabatlar alın, maliyyə vəziyyətinizi tam nəzarətdə saxlayın.
+    </p>
+
+    <div class="features">
+      <div class="feature-item">
+        <div class="feature-dot"></div>
+        <span class="feature-text">Real vaxtda balans izləmə</span>
+      </div>
+      <div class="feature-item">
+        <div class="feature-dot"></div>
+        <span class="feature-text">Aylıq hesabat və analiz</span>
+      </div>
+      <div class="feature-item">
+        <div class="feature-dot"></div>
+        <span class="feature-text">Tam aktivlik loqu sistemi</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sağ panel -->
+  <div class="right-panel">
+    <div class="auth-box">
+      <h2 class="auth-heading">Xoş gəlmisiniz</h2>
+      <p class="auth-sub">Hesabınıza daxil olun və ya yeni hesab yaradın</p>
+
+      <div class="tabs">
+        <button class="tab-btn active" id="btn-login" onclick="switchTab('login')">Giriş</button>
+        <button class="tab-btn" id="btn-reg" onclick="switchTab('register')">Qeydiyyat</button>
+      </div>
+
+      <!-- LOGIN -->
+      <div class="form-section visible" id="form-login">
+        <div class="field">
+          <label>İstifadəçi adı</label>
+          <input type="text" id="login-user" placeholder="istifadeciadiniz" autocomplete="username"/>
+        </div>
+        <div class="field">
+          <label>Şifrə</label>
+          <input type="password" id="login-pass" placeholder="••••••••" autocomplete="current-password"
+                 onkeydown="if(event.key==='Enter') doLogin()"/>
+        </div>
+        <div class="err-msg" id="login-err"></div>
+        <button class="submit-btn" onclick="doLogin()">Daxil ol</button>
+      </div>
+
+      <!-- REGISTER -->
+      <div class="form-section" id="form-reg">
+        <div class="field">
+          <label>İstifadəçi adı</label>
+          <input type="text" id="reg-user" placeholder="istifadeciadiniz" autocomplete="username"/>
+        </div>
+        <div class="field">
+          <label>Şifrə</label>
+          <input type="password" id="reg-pass" placeholder="Minimum 4 simvol" autocomplete="new-password"/>
+        </div>
+        <div class="field">
+          <label>Şifrəni təkrarla</label>
+          <input type="password" id="reg-pass2" placeholder="••••••••" autocomplete="new-password"
+                 onkeydown="if(event.key==='Enter') doRegister()"/>
+        </div>
+        <div class="err-msg" id="reg-err"></div>
+        <button class="submit-btn" onclick="doRegister()">Hesab yarat</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+const API = '/api';
+const LOG_KEY = 'budget_logs';
+
+function log(category, event, detail = '', status = 'info') {
+  const logs = JSON.parse(localStorage.getItem(LOG_KEY) || '[]');
+  logs.unshift({ id: Date.now(), ts: new Date().toISOString(), category, event, detail, status, user: '—' });
+  if (logs.length > 500) logs.length = 500;
+  localStorage.setItem(LOG_KEY, JSON.stringify(logs));
+}
+
+function switchTab(tab) {
+  document.getElementById('btn-login').classList.toggle('active', tab === 'login');
+  document.getElementById('btn-reg').classList.toggle('active', tab === 'register');
+  document.getElementById('form-login').classList.toggle('visible', tab === 'login');
+  document.getElementById('form-reg').classList.toggle('visible', tab === 'register');
+  document.getElementById('login-err').textContent = '';
+  document.getElementById('reg-err').textContent   = '';
+}
+
+async function doLogin() {
+  const username = document.getElementById('login-user').value.trim();
+  const password = document.getElementById('login-pass').value;
+  const errEl    = document.getElementById('login-err');
+  if (!username || !password) { errEl.textContent = 'Bütün sahələri doldurun'; return; }
+
+  log('AUTH', 'Giriş cəhdi', `İstifadəçi: ${username}`, 'info');
+  try {
+    const res  = await fetch(`${API}/login`, {
+      method: 'POST', credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password })
+    });
+    const data = await res.json();
+    if (res.ok) {
+      log('AUTH', 'Giriş uğurlu', `İstifadəçi: ${username}`, 'ok');
+      toast('Xoş gəlmisiniz, ' + data.username + '!', 'success');
+      setTimeout(() => { window.location.href = '/index.html'; }, 700);
+    } else {
+      log('AUTH', 'Giriş uğursuz', `${username} — ${data.error}`, 'error');
+      errEl.textContent = data.error || 'Xəta baş verdi';
+    }
+  } catch (e) {
+    log('ERROR', 'Login xətası', e.message, 'error');
+    errEl.textContent = 'Server ilə əlaqə qurulmadı';
+  }
+}
+
+async function doRegister() {
+  const username  = document.getElementById('reg-user').value.trim();
+  const password  = document.getElementById('reg-pass').value;
+  const password2 = document.getElementById('reg-pass2').value;
+  const errEl     = document.getElementById('reg-err');
+
+  if (!username || !password) { errEl.textContent = 'Bütün sahələri doldurun'; return; }
+  if (password.length < 4)   { errEl.textContent = 'Şifrə ən az 4 simvol olmalıdır'; return; }
+  if (password !== password2) { errEl.textContent = 'Şifrələr uyğun gəlmir'; return; }
+
+  log('AUTH', 'Qeydiyyat cəhdi', `İstifadəçi: ${username}`, 'info');
+  try {
+    const res  = await fetch(`${API}/register`, {
+      method: 'POST', credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password })
+    });
+    const data = await res.json();
+    if (res.ok) {
+      log('AUTH', 'Qeydiyyat uğurlu', `Yeni hesab: ${username}`, 'ok');
+      errEl.style.color = '#4caf82';
+      errEl.textContent = '✓ Qeydiyyat tamamlandı! Daxil olun.';
+      setTimeout(() => { errEl.textContent = ''; errEl.style.color = ''; switchTab('login'); }, 1500);
+    } else {
+      log('AUTH', 'Qeydiyyat uğursuz', `${username} — ${data.error}`, 'error');
+      errEl.textContent = data.error || 'Xəta baş verdi';
+    }
+  } catch (e) {
+    log('ERROR', 'Register xətası', e.message, 'error');
+    errEl.textContent = 'Server ilə əlaqə qurulmadı';
+  }
+}
+
+function toast(msg, type) {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.className = type;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 3000);
+}
+
+window.addEventListener('DOMContentLoaded', async () => {
+  log('NAV', 'Login səhifəsi açıldı', '', 'info');
+  try {
+    const res = await fetch(`${API}/me`, { credentials: 'include' });
+    if (res.ok) window.location.href = '/index.html';
+  } catch (_) {}
+});
+</script>
+</body>
+</html>
